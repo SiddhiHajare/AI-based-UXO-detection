@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="app.py">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime location tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  
+    <!-- leaflet css  -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://unpkg.com/webcam-easy/dist/webcam-easy.min.js"></script>
+</head>
+
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+  
+          <!--Logo-->
+          <a class="navbar-brand fs-4" href="#">UXO Detection</a>
+          <!--logo ends-->
+  
+          <!--Toggle-->
+          <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <!--Toggle ends-->
+  
+          <!--Sidebar-->
+          <div class="sidebar offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <!--Sidebar header-->
+            <div class="offcanvas-header text-white border-bottom">
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">InteLegal</h5>
+              <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+          
+            <!--sidebar body-->
+            <div class="offcanvas-body p-lg-0" >
+              <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item nav-mx-2">
+                  <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+  
+                <li class="nav-item nav-mx-2">
+                  <a class="nav-link" href="#about">About</a>
+                </li>
+  
+                <li class="nav-item nav-mx-2">
+                  <a class="nav-link" href="#user_guide">User Guide</a>
+                </li>
+                
+              </ul>
+              <!--Login-->
+              <div class="d-flex justify-content-center align-items-center gap-4">
+                <a href="login.html" class="text-white text-decoration-none px-3 py-1 rounded-4" style="background-color: rgb(95, 141, 125);">Login</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </nav>
+      <!--Navbar ends-->
+
+    <div id="parent-container">
+        <div id="map"></div>
+
+        <video id="Webcam" autoplay playsinline width="800" height="600"></video>
+        <canvas id="canvas"></canvas>
+    </div>
+    <script>
+    const webCamElement = document.getElementById("Webcam");
+    const canvasElement = document.getElementById("canvas");
+    const webcam = new Webcam(webCamElement,"user",canvasElement);
+    const mapElement = document.getElementById("map");
+
+    mapElement.style.justifyContent = 'flex-start';
+    mapElement.style.alignItems = 'flex-start';
+    webcam.start();
+  </script>
+</body>
+</html>
+
+<!-- leaflet js  -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Map initialization 
+    var map = L.map('map').setView([14.0860746, 100.608406], 6);
+
+    // osm layer
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    osm.addTo(map);
+
+    if (!navigator.geolocation) {
+        console.log("Your browser doesn't support geolocation feature!")
+    } 
+    else {
+        updatePosition();
+        // Update position every 10000 milliseconds (10 seconds)
+        setInterval(updatePosition, 10000);
+    }
+
+    var marker, circle;
+
+    function updatePosition() {
+        navigator.geolocation.getCurrentPosition(getPosition);
+    }
+
+    function getPosition(position) {
+        var lat = position.coords.latitude
+        var long = position.coords.longitude
+        var accuracy = position.coords.accuracy
+
+        if (marker) {
+            map.removeLayer(marker)
+        }
+
+        if (circle) {
+            map.removeLayer(circle)
+        }
+
+        marker = L.marker([lat, long])
+        circle = L.circle([lat, long], { radius: accuracy })
+
+        var featureGroup = L.featureGroup([marker, circle]).addTo(map)
+
+        map.fitBounds(featureGroup.getBounds())
+
+        console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
+    }
+</script>
