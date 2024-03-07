@@ -7,18 +7,53 @@ body {
 	padding: 0;
 }
 
-/* #map {
-	width: 50%;
-	height: 100vh;
-	margin-top: 80px;
-	margin-left: 40px;
-	border: 1px solid black;
-} */
+/* TABLE STYLING BEGINS */
+#table {
+	border-collapse: collapse; /* Removes borders between adjacent cells */
+	margin-top: 20px;
+	margin: auto; /* Center-align the table horizontally and vertically */
+}
 
-/* .container {
+th, td {
+	border: 1px solid #000; /* Adds a 1px solid border to all cells */
+	padding: 10px; /* Adds padding to cells */
+	text-align: center; /* Center-align text in cells */
+	font-family: 'Arial', sans-serif; /* Set font family */
+}
+
+th {
+	background-color: #eee; /* Sets background color for headers */
+	color: #333; /* Header text color */
+}
+
+/* Optional: Add background color and alternate row color for better readability */
+tr:nth-child(even) {
+	background-color: #f2f2f2; /* Even row background color */
+}
+
+tr:hover {
+	background-color: #ddd; /* Hover effect for better interactivity */
+}
+/* TABLE STYLING ENDS */
+
+
+/*Start and Stop buttons */
+#startBtn,#stopBtn {
+  padding: 5px; /* Reduce padding to make buttons smaller */
+  font-size: 14px; /* Reduce font size */
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 2px;
+}
+
+.button-container {
 	display: flex;
 	justify-content: space-between;
-} */
+	padding: 10px; /* Add padding for spacing */
+	margin-top:100px;
+}
 
 #parent-container {
   display: grid;
@@ -29,8 +64,8 @@ body {
 #map {
   grid-column: 1;
 	width: 80%;
-	height: 100vh;
-	margin-top: 80px;
+	height: 70vh;
+	margin-top: 50px;
 	margin-left: 40px;
 	border: 1px solid black;
 }
@@ -39,13 +74,10 @@ body {
   grid-column: 2;
   width: 80%;
 	height: 100vh;
+	margin-right: 40px;
 
 }
 
-/* #canvas {
-  grid-column: 3;
-  
-} */
 
 
 .navbar {

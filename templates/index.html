@@ -70,13 +70,43 @@
     </nav>
       <!--Navbar ends-->
 
+    <!-- Buttons -->
+    <div class="button-container">
+      <button id="startBtn" onclick="startWebcam()">Start</button>
+      <button id="stopBtn" onclick="stopWebcam()" disabled>Stop</button>
+    </div>
     <div id="parent-container">
         <div id="map"></div>
 
         <video id="Webcam" autoplay playsinline width="800" height="600"></video>
         <canvas id="canvas"></canvas>
     </div>
+  <!-- START AND STOP BUTTON -->
     <script>
+        let webcam;
+        function startWebcam() {
+            const webCamElement = document.getElementById("Webcam");
+            const canvasElement = document.getElementById("canvas");
+
+            webcam = new Webcam(webCamElement, "user", canvasElement);
+            webcam.start();
+
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("stopBtn").disabled = false;
+        }
+
+        function stopWebcam() {
+            if (webcam) {
+                webcam.stop();
+            }
+
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("stopBtn").disabled = true;
+        }
+  </script>
+
+  <!-- START AND STOP BUTTON -->
+  <script>
     const webCamElement = document.getElementById("Webcam");
     const canvasElement = document.getElementById("canvas");
     const webcam = new Webcam(webCamElement,"user",canvasElement);
@@ -86,6 +116,23 @@
     mapElement.style.alignItems = 'flex-start';
     webcam.start();
   </script>
+
+  <table id="table">
+    <thead>
+        <tr>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Accuracy</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td id="latitude-value"></td>
+            <td id="longitude-value"></td>
+            <td id="accuracy-value"></td>
+        </tr>
+    </tbody>
+  </table>
 </body>
 </html>
 
@@ -139,3 +186,22 @@
         console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
     }
 </script>
+  
+
+<script>
+    function getPosition(position) {
+        var lat = position.coords.latitude;
+        var long = position.coords.longitude;
+        var accuracy = position.coords.accuracy;
+
+          // Update marker and circle (existing code)
+
+          // Update table content
+        document.getElementById("latitude-value").textContent = lat;
+        document.getElementById("longitude-value").textContent = long;
+        document.getElementById("accuracy-value").textContent = accuracy;
+    }
+</script>
+
+
+<!-- </html> -->
